@@ -87,8 +87,8 @@ int main()
 	messageText.setCharacterSize(75);
 	scoreText.setCharacterSize(100);
 	// Choose a color
-	messageText.setFillColor(Color::White);
-	scoreText.setFillColor(Color::White);
+	messageText.setFillColor(Color::Red);
+	scoreText.setFillColor(Color::Red);
 	// Position the text
 	FloatRect textRect = messageText.getLocalBounds();
 	messageText.setOrigin(textRect.left + textRect.width / 2.0f,
@@ -227,6 +227,11 @@ int main()
 				}
 			}
 
+			// Update the score text
+			std::stringstream ss;
+			ss << "Score = " << score;
+			scoreText.setString(ss.str());
+
 		} // End Pause-If
 		/*****************************************
 		Draw the scene
@@ -246,6 +251,13 @@ int main()
 		window.draw(spriteTree);
 		// Draw the insect
 		window.draw(spriteBee);
+		// Draw the score
+		window.draw(scoreText);
+		if (paused)
+		{
+			// Draw our message
+			window.draw(messageText);
+		}
 
 		// Show everything we just drew
 		window.display();
