@@ -1,5 +1,14 @@
 #include <sstream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
+//Things to Improve: 
+//Score updates far too often. Place sstream code into block occasionally executed
+//A frame rate display would be nice.
+//Draw more sprites in the background
+//Animate sprites.
+//Put Colored box behind score display
+
 
 //Using Namespaces
 using namespace sf;
@@ -158,6 +167,23 @@ int main()
 	// Control the player input
 	bool acceptInput = false;
 
+	// Prepare the sounds
+	// The player chopping sound
+	SoundBuffer chopBuffer;
+	chopBuffer.loadFromFile("sounds/chop.wav");
+	Sound chop;
+	chop.setBuffer(chopBuffer);
+	// The player has met his end under a branch
+	SoundBuffer deathBuffer;
+	deathBuffer.loadFromFile("sounds/death.wav");
+	Sound death;
+	death.setBuffer(deathBuffer);
+	// Out of time
+	SoundBuffer ootBuffer;
+	ootBuffer.loadFromFile("sounds/out_of_time.wav");
+	Sound outOfTime;
+	outOfTime.setBuffer(ootBuffer);
+
 	while (window.isOpen())
 	{
 		/*****************************************
@@ -208,7 +234,6 @@ int main()
 		// Make sure we are accepting input
 		if (acceptInput)
 		{
-			// More code here next...
 			// First handle pressing the right cursor key
 			if (Keyboard::isKeyPressed(Keyboard::Right))
 			{
@@ -227,6 +252,9 @@ int main()
 				logSpeedX = -5000;
 				logActive = true;
 				acceptInput = false;
+
+				// Play a chop sound
+				chop.play();
 			}
 			// Handle the left cursor key
 			if (Keyboard::isKeyPressed(Keyboard::Left))
@@ -246,6 +274,9 @@ int main()
 				logSpeedX = 5000;
 				logActive = true;
 				acceptInput = false;
+
+				// Play a chop sound
+				chop.play();
 			}
 		}
 
@@ -277,6 +308,9 @@ int main()
 					textRect.top +
 					textRect.height / 2.0f);
 				messageText.setPosition(1920 / 2.0f, 1080 / 2.0f);
+
+				// Play the out of time sound
+				outOfTime.play();
 			}
 
 			// Setup the bee
@@ -311,11 +345,11 @@ int main()
 				if (!cloudActive[i])
 				{
 					// How fast is the cloud
-					srand((int)time(0) * (10*i));
-					cloudSpeed[i] = (rand() % 200);
+					srand(i);
+					cloudSpeed[i] = (50 * i + 50);
 					// How high is the cloud
-					srand((int)time(0) * 10);
-					float height = ((rand() % 150) + (i*150));
+					srand(i);
+					float height = ((i*150));
 					spriteCloud[i].setPosition(-200, height);
 					cloudActive[i] = true;
 				}
@@ -402,6 +436,9 @@ int main()
 					textRect.top + textRect.height / 2.0f);
 				messageText.setPosition(1920 / 2.0f,
 					1080 / 2.0f);
+
+				// Play the death sound
+				death.play();
 			}
 
 		} // End Pause-If
