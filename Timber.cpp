@@ -333,19 +333,18 @@ int main()
 				if (!cloudActive[i])
 				{
 					// How fast is the cloud
-					srand((int)time(0) * 10);
+					srand((int)time(0) * (10*i));
 					cloudSpeed[i] = (rand() % 200);
 					// How high is the cloud
 					srand((int)time(0) * 10);
-					float height = (rand() % 150);
+					float height = ((rand() % 150) + (i*150));
 					spriteCloud[i].setPosition(-200, height);
 					cloudActive[i] = true;
 				}
 				else
 				{
 					spriteCloud[i].setPosition(
-						spriteCloud[i].getPosition().x +
-						(cloudSpeed[i] * dt.asSeconds()),
+						spriteCloud[i].getPosition().x + (cloudSpeed[i] * dt.asSeconds()),
 						spriteCloud[i].getPosition().y);
 					// Has the cloud reached the right hand edge of the screen?
 					if (spriteCloud[i].getPosition().x > 1920)
